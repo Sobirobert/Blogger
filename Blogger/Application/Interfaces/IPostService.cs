@@ -9,4 +9,8 @@ public interface IPostService
     PostDto GetPostByID(int id);
 
     PostDto AddNewPost(CreatePostDto newPost);
+
+    void UpdatePost(UpdatePostDto updatePostDto);
+
+    void DeletePost(int id);
 }

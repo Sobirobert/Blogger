@@ -6,9 +6,7 @@ using Microsoft.AspNet.OData.Builder;
 using Microsoft.OData.Edm;
 using Domain.Interfaces;
 using Infrastructure.Repositories;
-
-
-
+using WebAPI.Controllers.Installers;
 
 namespace WebAPI;
 
@@ -23,16 +21,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddScoped<IPostRepository, PostRepository>();
-        services.AddScoped<IPostService, PostService>();
-        services.AddSingleton(AutoMapperConfig.Initialize());
-
-        services.AddControllers();
-        services.AddSwaggerGen(c =>
-        {
-            c.EnableAnnotations();
-            c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebAPI", Version = "v1" });
-        });
+        services.InstallServicesInAssembly(Configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
