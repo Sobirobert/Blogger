@@ -1,20 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HostFiltering;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Entities.Interfaces;
+﻿using Microsoft.OpenApi.Models;
 using Application.Interfaces;
 using Application.Services;
 using Application.Mappings;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.OData.Edm;
+using Domain.Interfaces;
+using Infrastructure.Repositories;
 
 
 
@@ -39,6 +30,7 @@ public class Startup
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {
+            c.EnableAnnotations();
             c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebAPI", Version = "v1" });
         });
     }
@@ -51,5 +43,22 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
         }
+
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+    }
+    public static IEdmModel GetEdmModel()
+    {
+        var builder = new ODataConventionModelBuilder();
+        builder.EntitySet<Application.Dto.PostDto>("Posts");
+        return builder.GetEdmModel();
     }
 }

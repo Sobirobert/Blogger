@@ -1,6 +1,8 @@
-﻿using Application.Interfaces;
+﻿using Application.Dto;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
@@ -14,11 +16,32 @@ namespace WebAPI.Controllers
             _postService = postService;
         }
 
+        [SwaggerOperation(Summary = "Retrieves all posts")]
         [HttpGet]
         public IActionResult Get()
         {
             var posts = _postService.GetAllPosts();
             return Ok(posts);
+        }
+
+        [SwaggerOperation(Summary = "Retrieves a specific post by unique id")]
+        [HttpGet("(id)")]
+        public IActionResult Get(int id)
+        {
+            var posts = _postService.GetPostByID(id);
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return Ok(posts);
+        }
+
+        [SwaggerOperation(Summary = "Created a new post")]
+        [HttpPost]
+        public IActionResult Create(CreatePostDto newPost)
+        {
+            var post = _postService.AddNewPost(newPost);
+            return Created($"api/post/{post.Id}", post);
         }
     }
 }
