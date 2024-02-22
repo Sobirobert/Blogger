@@ -1,4 +1,4 @@
-﻿namespace WebAPI.Controllers.Installers;
+﻿namespace WebAPI.Installers;
 
 public interface IInstaller
 {

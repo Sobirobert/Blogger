@@ -6,7 +6,7 @@ using Microsoft.AspNet.OData.Builder;
 using Microsoft.OData.Edm;
 using Domain.Interfaces;
 using Infrastructure.Repositories;
-using WebAPI.Controllers.Installers;
+using WebAPI.Installers;
 
 namespace WebAPI;
 

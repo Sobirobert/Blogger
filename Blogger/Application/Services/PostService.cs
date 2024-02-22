@@ -51,4 +51,11 @@ public class PostService : IPostService
         var post = _postRepository.GetById(id);
         _postRepository.Delete(post);
     }
+
+    public SearchPostDto SearchTitle(string searchingTitle)
+    {
+        var posts = _postRepository.GetAll();
+        var searchingPost = posts.Where(post => post.Title.IndexOf(searchingTitle, StringComparison.OrdinalIgnoreCase) >= 0);
+        return _mapper.Map<SearchPostDto>(searchingPost);
+    }
 }

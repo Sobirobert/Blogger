@@ -12,6 +12,6 @@ public class Post : AuditableEntity
 
     public Post (int id, string title, string content)
     {
-        (Id, Title, Content) = (id, Title, content);
+        (Id, Title, Content) = (id, title, content);
     }
 }

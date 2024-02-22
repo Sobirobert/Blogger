@@ -1,4 +1,5 @@
-﻿
+﻿using Application.Interfaces;
+using Application.Services;
 using Domain.Interfaces;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +11,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddScoped<IPostRepository, PostRepository>();
 
         return services;

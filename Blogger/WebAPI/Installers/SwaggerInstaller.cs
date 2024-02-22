@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.OpenApi.Models;
 
-namespace WebAPI.Controllers.Installers;
+namespace WebAPI.Installers;
 
 public class SwaggerInstaller : IInstaller
 {

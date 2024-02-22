@@ -1,16 +1,18 @@
 ﻿using Application.Dto;
 using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace WebAPI.Controllers;
+namespace WebAPI.Controllers.V1;
 
-[Route("api/[controller]")]
+[Route("api/{v:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 [ApiController]
 public class PostsController : ControllerBase
 {
     private readonly IPostService _postService;
-    public PostsController(IPostService postService) 
+    public PostsController(IPostService postService)
     {
         _postService = postService;
     }
@@ -59,4 +61,13 @@ public class PostsController : ControllerBase
         return NoContent();
     }
 
+    [SwaggerOperation(Summary = "Searching specific title")]
+    [HttpGet("Search/{title}")]
+    public IActionResult SearachingPost(string title)
+    {
+        var searchingPost = _postService.SearchTitle(title);
+        return Ok(searchingPost);
+    }
 }
+
+
