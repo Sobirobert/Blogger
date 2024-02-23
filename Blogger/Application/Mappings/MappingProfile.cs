@@ -18,9 +18,9 @@ public class MappingProfile : Profile
 
         foreach (var type in types)
         {
-            var insance = Activator.CreateInstance(type);
+            var instance = Activator.CreateInstance(type);
             var methodInfo = type.GetMethod("Mapping");
-            methodInfo?.Invoke(insance, new object[] { this });
+            methodInfo?.Invoke(instance, new object[] { this });
         }
     }
 }

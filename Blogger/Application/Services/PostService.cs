@@ -3,6 +3,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.Extensions.Hosting;
 
 namespace Application.Services;
 
@@ -52,10 +53,10 @@ public class PostService : IPostService
         _postRepository.Delete(post);
     }
 
-    public SearchPostDto SearchTitle(string searchingTitle)
+    public PostDto SearchTitle(string searchingTitle)
     {
         var posts = _postRepository.GetAll();
-        var searchingPost = posts.Where(post => post.Title.IndexOf(searchingTitle, StringComparison.OrdinalIgnoreCase) >= 0);
-        return _mapper.Map<SearchPostDto>(searchingPost);
+        var postFound = posts.Where(post => post.Title.Contains(searchingTitle));
+        return _mapper.Map<List<PostDto>>(postFound);
     }
 }

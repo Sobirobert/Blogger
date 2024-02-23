@@ -14,5 +14,5 @@ public interface IPostService
 
     void DeletePost(int id);
 
-    SearchPostDto SearchTitle(string searchingTitle);
+    PostDto SearchTitle(string searchingTitle);
 }
