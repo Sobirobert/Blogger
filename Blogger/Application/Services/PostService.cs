@@ -53,7 +53,7 @@ public class PostService : IPostService
         _postRepository.Delete(post);
     }
 
-    public PostDto SearchTitle(string searchingTitle)
+    public List<PostDto> SearchTitle(string searchingTitle)
     {
         var posts = _postRepository.GetAll();
         var postFound = posts.Where(post => post.Title.Contains(searchingTitle));
