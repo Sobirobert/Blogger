@@ -1,5 +1,4 @@
-﻿
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;

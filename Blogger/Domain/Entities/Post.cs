@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Domain.Entities;
 
 [Table("Posts")]
-
 public class Post : AuditableEntity
 {
     [Key]
@@ -19,9 +18,10 @@ public class Post : AuditableEntity
     [MaxLength(2000)]
     public string Content { get; set; }
 
-    public Post() { }
+    public Post()
+    { }
 
-    public Post (int id, string title, string content)
+    public Post(int id, string title, string content)
     {
         (Id, Title, Content) = (id, title, content);
     }

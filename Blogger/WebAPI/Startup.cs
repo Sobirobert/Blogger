@@ -1,22 +1,16 @@
-﻿using Microsoft.OpenApi.Models;
-using Application.Interfaces;
-using Application.Services;
-using Application.Mappings;
-using Microsoft.AspNet.OData.Builder;
+﻿using Microsoft.AspNet.OData.Builder;
 using Microsoft.OData.Edm;
-using Domain.Interfaces;
-using Infrastructure.Repositories;
 using WebAPI.Installers;
 
 namespace WebAPI;
 
 public class Startup
 {
-    public Startup(IConfiguration configuration) 
+    public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
     }
-    
+
     public IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services)
@@ -44,6 +38,7 @@ public class Startup
             endpoints.MapControllers();
         });
     }
+
     public static IEdmModel GetEdmModel()
     {
         var builder = new ODataConventionModelBuilder();

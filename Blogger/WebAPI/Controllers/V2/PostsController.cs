@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers.V2;
+
 [ApiExplorerSettings(IgnoreApi = true)]
 [ApiVersion("2.0")]
 [Route("api/{v:apiVersion}/[controller]")]
@@ -11,6 +12,7 @@ namespace WebAPI.Controllers.V2;
 public class PostsController : ControllerBase
 {
     private readonly IPostService _postService;
+
     public PostsController(IPostService postService)
     {
         _postService = postService;
@@ -63,5 +65,4 @@ public class PostsController : ControllerBase
         _postService.DeletePost(id);
         return NoContent();
     }
-
 }

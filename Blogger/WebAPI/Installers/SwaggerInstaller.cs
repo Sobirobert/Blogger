@@ -1,5 +1,4 @@
-﻿
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 
 namespace WebAPI.Installers;
 
