@@ -1,5 +1,6 @@
 ﻿using Application.Dto;
 using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -11,7 +12,6 @@ namespace WebAPI.Controllers.V1;
 public class PostsController : ControllerBase
 {
     private readonly IPostService _postService;
-
     public PostsController(IPostService postService)
     {
         _postService = postService;
@@ -69,3 +69,5 @@ public class PostsController : ControllerBase
         return Ok(searchingPost);
     }
 }
+
+

@@ -29,7 +29,6 @@ public class PostRepository : IPostRepository
         _posts.Add(post);
         return post;
     }
-
     public void Update(Post post)
     {
         post.LastModified = DateTime.UtcNow;

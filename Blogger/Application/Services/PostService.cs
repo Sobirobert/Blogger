@@ -3,6 +3,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.Extensions.Hosting;
 
 namespace Application.Services;
 
@@ -10,9 +11,8 @@ public class PostService : IPostService
 {
     private readonly IPostRepository _postRepository;
     private readonly IMapper _mapper;
-
-    public PostService(IPostRepository postRepository, IMapper mapper)
-    {
+    public PostService(IPostRepository postRepository, IMapper mapper) 
+    { 
         _postRepository = postRepository;
         _mapper = mapper;
     }
