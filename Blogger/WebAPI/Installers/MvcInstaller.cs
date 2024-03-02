@@ -13,7 +13,10 @@ public class MvcInstaller : IInstaller
         services.AddApplication();
         services.AddInfrastructure();
 
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.WriteIndented = true;
+        });
 
         services.AddApiVersioning(x =>
         {

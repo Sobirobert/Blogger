@@ -1,6 +1,9 @@
-﻿using Domain.Entities;
+﻿using Application.Dto;
+using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.ExtensionMethods;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -13,33 +16,36 @@ public class PostRepository : IPostRepository
         _context = context;
     }
 
-    public IEnumerable<Post> GetAll()
+    public async Task<IEnumerable<Post>> GetAllAsync()
     {
-        return _context.Posts;
+        return await _context.Posts.ToListAsync();
     }
 
-    public Post GetById(int id)
+    public async Task<Post> GetByIdAsync(int id)
     {
-        return _context.Posts.SingleOrDefault(x => x.Id == id);
+        return await _context.Posts.SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public Post Add(Post post)
+    public async Task<Post> AddAsync(Post post)
     {
-        post.Created = DateTime.UtcNow;
-        _context.Posts.Add(post);
-        _context.SaveChanges();
-        return post;
+        //post.Created = DateTime.UtcNow;
+        var createdPost = await _context.Posts.AddAsync(post);
+        await _context.SaveChangesAsync();
+        return createdPost.Entity;
     }
-    public void Update(Post post)
+
+    public async Task UpdateAsync(Post post)
     {
-        post.LastModified = DateTime.UtcNow;
+        //post.LastModified = DateTime.UtcNow;
         _context.Posts.Update(post);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+        await Task.CompletedTask;
     }
 
-    public void Delete(Post post)
+    public async Task DeleteAsync(Post post)
     {
         _context.Posts.Remove(post);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+        await Task.CompletedTask;
     }
 }

@@ -7,14 +7,14 @@ namespace Infrastructure.Data;
 
 public class BloggerContext : DbContext
 {
-    public BloggerContext(DbContextOptions<BloggerContext> options) : base(options)
+    public BloggerContext(DbContextOptions options) : base(options)
     {
 
     }
 
     public DbSet<Post> Posts { get; set; }
 
-    public override int SaveChanges()
+    public async Task<int> SaveChangesAsync()
     {
         var entries = ChangeTracker
                .Entries()
