@@ -12,7 +12,7 @@ public class CosmosPost
     [JsonProperty]
     public string Id { get; set; }
     public string Title { get; set; }
-    public string Contennt { get; set; }
+    public string Content { get; set; }
 
 
 }

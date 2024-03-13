@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers.V2;
+
+[ApiExplorerSettings(IgnoreApi = true)]
 [ApiVersion("2.0")]
+//[Route("api/{v: apiVersion}/[controller]")]
 [Route("api/[controller]")]
 [ApiController]
-//[ApiExplorerSettings(GroupName = "v1")]
 public class PostsController : ControllerBase
 {
     private readonly ICosmosPostService _postService;

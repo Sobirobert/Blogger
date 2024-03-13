@@ -3,7 +3,6 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
-using Microsoft.Extensions.Hosting;
 
 namespace Application.Services;
 
@@ -18,10 +17,15 @@ public class PostService : IPostService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<PostDto>> GetAllPostAsync()
+    public async Task<IEnumerable<PostDto>> GetAllPostsAsync(int pageNumber, int pageSize, string sortField, bool ascending, string filterBy)
     {
-        var posts = await _postRepository.GetAllAsync();
+        var posts = await _postRepository.GetAllAsync(pageNumber, pageSize, sortField, ascending, filterBy);
         return _mapper.Map<IEnumerable<PostDto>>(posts);
+    }
+
+    public async Task<int> GetAllPostsCountAsync(string filterBy)
+    {
+        return await _postRepository.GetAllCountAsync(filterBy);
     }
 
     public async Task<PostDto> GetPostByIdAsync(int id)
@@ -54,12 +58,4 @@ public class PostService : IPostService
         var post = await _postRepository.GetByIdAsync(id);
         await _postRepository.DeleteAsync(post);
     }
-
-    public async Task<List<PostDto>> SearachingPostAsync(string searchingTitle)
-    {
-        var posts = await _postRepository.GetAllAsync();
-        var postFound = posts.Where(post => post.Title.Contains(searchingTitle));
-        return _mapper.Map<List<PostDto>>(postFound);
-    }
-
 }
