@@ -22,15 +22,15 @@ namespace WebAPI.Installers
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(option =>
+            .AddJwtBearer(option =>
+            {
+                option.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    option.TokenValidationParameters = new TokenValidationParameters()
-                    {
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
-                    };
-                });
+                };
+            });
         }
     }
 }

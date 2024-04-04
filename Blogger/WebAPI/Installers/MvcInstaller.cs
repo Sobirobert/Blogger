@@ -1,5 +1,6 @@
 ﻿
 using Application;
+using Application.Services;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -15,9 +16,13 @@ public class MvcInstaller : IInstaller
 
         services.AddControllers()
             .AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.WriteIndented = true;
-        });
+            {
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
+
+        services.AddAuthentication();
+
+        services.AddTransient<UserResolverService>();
 
         services.AddApiVersioning(x =>
         {
@@ -27,4 +32,6 @@ public class MvcInstaller : IInstaller
             x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
         });
     }
+    
+
 }
