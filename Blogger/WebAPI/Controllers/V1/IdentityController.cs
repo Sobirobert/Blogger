@@ -7,6 +7,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebAPI.Models;
+using Application.Services.Emails;
+using Application.Interfaces;
+using Domain.Enums;
 
 namespace WebAPI.Controllers.V1;
 
@@ -17,11 +20,13 @@ public class IdentityController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
-    public IdentityController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    private readonly IEmailSenderService _emailSenderService;
+    public IdentityController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IEmailSenderService emailSenderService)
     {
         _roleManager = roleManager;
         _userManager = userManager;
         _configuration = configuration;
+        _emailSenderService = emailSenderService;
     }
 
     [HttpPost]
@@ -61,7 +66,7 @@ public class IdentityController : ControllerBase
 
         await _userManager.AddToRoleAsync(user, UserRoles.User);
 
-        //await _emailSenderService.Send(user.Email, "Regisstration confirmation");
+        await _emailSenderService.Send(user.Email, "Registration confirmation", EmailTemplate.WelcomeMessage, user);
 
         return Ok(new Response<bool> { Succeeded = true, Message = "User created successfully!" });
     }
@@ -76,7 +81,7 @@ public class IdentityController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new Response<bool>
             {
                 Succeeded = false,
-                Message = "User slready exists!"
+                Message = "User already exists!"
             });
         }
 
