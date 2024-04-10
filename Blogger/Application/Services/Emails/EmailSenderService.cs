@@ -11,12 +11,12 @@ namespace Application.Services.Emails;
 public class EmailSenderService : IEmailSenderService
 {
     private readonly IFluentEmail _email;
-    private readonly ILogger _Logger;
-    private const string TemplatePath = "Application.Services.Emails.Templates.{0}.cshtml;";
-    public EmailSenderService(IFluentEmail email, ILogger<EmailSenderService> Logger)
+    private readonly ILogger _logger;
+    private const string TemplatePath = "Application.Services.Emails.Templates.{0}.cshtml";
+    public EmailSenderService(IFluentEmail email, ILogger<EmailSenderService> logger)
     {
         _email = email;
-        _Logger = Logger;
+        _logger = logger;
     }
 
     public async Task<bool> Send(string to, string subject, EmailTemplate template, object model)
@@ -28,7 +28,7 @@ public class EmailSenderService : IEmailSenderService
 
         if (!result.Successful)
         {
-            _Logger.LogError("Faild to send email. \n{Errors}", string.Join(Environment.NewLine, result.ErrorMessages));
+            _logger.LogError("Faild to send email. \n{Errors}", string.Join(Environment.NewLine, result.ErrorMessages));
         }
 
         return result.Successful;

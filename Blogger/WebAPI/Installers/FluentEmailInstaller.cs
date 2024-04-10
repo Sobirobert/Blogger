@@ -8,7 +8,7 @@ public class FluentEmailInstaller : IInstaller
     public void InstallServices(IServiceCollection services, IConfiguration Configuration)
     {
         services
-                .AddFluentEmail(Configuration["FluentEmail:robertsobieraj@wp.pl"], Configuration["FluentEmail:FromName"])
+                .AddFluentEmail(Configuration["FluentEmail:FromEmail"], Configuration["FluentEmail:FromName"])
                 .AddRazorRenderer()
                 .AddSmtpSender(Configuration["FluentEmail:SmptSender:Host"],
                      int.Parse(Configuration["FluentEmail:SmptSender:Port"]),
