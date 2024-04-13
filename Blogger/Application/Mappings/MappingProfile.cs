@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using System.Reflection;
 
 namespace Application.Mappings;
@@ -24,5 +23,3 @@ public class MappingProfile : Profile
         }
     }
 }
-
-

@@ -1,5 +1,4 @@
-﻿using Application.Dto;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.ExtensionMethods;
@@ -19,16 +18,17 @@ public class PostRepository : IPostRepository
     public async Task<IEnumerable<Post>> GetAllAsync(int pageNumber, int pageSize, string sortField, bool ascending, string filterBy)
     {
         return await _context.Posts
-            .Where(m => m.Title.ToLower().Contains(filterBy.ToLower())|| m.Content.ToLower().Contains(filterBy.ToLower()))
+            .Where(m => m.Title.ToLower().Contains(filterBy.ToLower()) || m.Content.ToLower().Contains(filterBy.ToLower()))
             .OrderByPropertyName(sortField, ascending)
             .Skip((pageNumber - 1) * pageSize).Take(pageSize)
             .ToListAsync();
     }
+
     public async Task<int> GetAllCountAsync(string filterBy)
     {
         return await _context.Posts.Where(m => m.Title.ToLower().Contains(filterBy.ToLower()) || m.Content.ToLower().Contains(filterBy.ToLower())).CountAsync();
-
     }
+
     public async Task<Post> GetByIdAsync(int id)
     {
         return await _context.Posts.SingleOrDefaultAsync(x => x.Id == id);
@@ -56,6 +56,4 @@ public class PostRepository : IPostRepository
         await _context.SaveChangesAsync();
         await Task.CompletedTask;
     }
-
-
 }

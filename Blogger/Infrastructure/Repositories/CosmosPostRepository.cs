@@ -8,6 +8,7 @@ namespace Infrastructure.Repositories;
 public class CosmosPostRepository : ICosmosPostRepository
 {
     private readonly ICosmosStore<CosmosPost> _cosmosStore;
+
     public CosmosPostRepository(ICosmosStore<CosmosPost> cosmosStore)
     {
         _cosmosStore = cosmosStore;

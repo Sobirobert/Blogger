@@ -16,5 +16,4 @@ public class PagedResponse<T> : Response<T>
         Data = data;
         Succeeded = true;
     }
-
 }

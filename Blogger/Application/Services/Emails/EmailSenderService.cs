@@ -13,6 +13,7 @@ public class EmailSenderService : IEmailSenderService
     private readonly IFluentEmail _email;
     private readonly ILogger _logger;
     private const string TemplatePath = "Application.Services.Emails.Templates.{0}.cshtml";
+
     public EmailSenderService(IFluentEmail email, ILogger<EmailSenderService> logger)
     {
         _email = email;
@@ -33,7 +34,9 @@ public class EmailSenderService : IEmailSenderService
 
         return result.Successful;
     }
+
     #region Helper methods;
+
     private static ExpandoObject ToExpando(object model)
     {
         if (model is ExpandoObject exp)
@@ -68,7 +71,6 @@ public class EmailSenderService : IEmailSenderService
 
         return isAnonymousType;
     }
-
 
     #endregion Helper methods;
 }

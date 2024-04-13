@@ -5,32 +5,30 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace WebAPI.Installers
+namespace WebAPI.Installers;
+
+public class IdentityInstaller : IInstaller
 {
-    public class IdentityInstaller : IInstaller
+    public void InstallServices(IServiceCollection services, IConfiguration Configuration)
     {
-        public void InstallServices(IServiceCollection services, IConfiguration Configuration)
+        services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<BloggerContext>()
+            .AddDefaultTokenProviders();
+
+        services.AddAuthentication(options =>
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<BloggerContext>()
-                .AddDefaultTokenProviders();
-
-
-            services.AddAuthentication(options =>
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(option =>
+        {
+            option.TokenValidationParameters = new TokenValidationParameters()
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(option =>
-            {
-                option.TokenValidationParameters = new TokenValidationParameters()
-                {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
-                };
-            });
-        }
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+            };
+        });
     }
 }

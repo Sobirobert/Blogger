@@ -1,22 +1,18 @@
-﻿using Microsoft.OpenApi.Models;
-using Application.Interfaces;
-using Application.Services;
-using Application.Mappings;
+﻿using Application.Dto;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.OData.Edm;
-using Domain.Interfaces;
-using Infrastructure.Repositories;
 using WebAPI.Installers;
+using WebAPI.MiddelWares;
 
 namespace WebAPI;
 
 public class Startup
 {
-    public Startup(IConfiguration configuration) 
+    public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
     }
-    
+
     public IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services)
@@ -33,23 +29,25 @@ public class Startup
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
         }
 
+        app.UseMiddleware<ErrorHandlingMiddelware>();
         app.UseHttpsRedirection();
 
         app.UseRouting();
 
-        app.UseAuthorization();
+        app.UseAuthentication();  // do logowania się na konto
 
-        app.UseAuthorization();
+        app.UseAuthorization();   // do logowania się na konto
 
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
         });
     }
+
     public static IEdmModel GetEdmModel()
     {
         var builder = new ODataConventionModelBuilder();
-        builder.EntitySet<Application.Dto.PostDto>("Posts");
+        builder.EntitySet<PostDto>("Posts");
         return builder.GetEdmModel();
     }
 }

@@ -15,7 +15,6 @@ public class CosmosPostService : ICosmosPostService
     {
         _postRepository = postRepository;
         _mapper = mapper;
-
     }
 
     public async Task<IEnumerable<CosmosPostDto>> GetAllPostAsync()

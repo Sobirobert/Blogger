@@ -1,9 +1,9 @@
-﻿
-using Application;
+﻿using Application;
 using Application.Services;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using WebAPI.MiddelWares;
 
 namespace WebAPI.Installers;
 
@@ -20,9 +20,10 @@ public class MvcInstaller : IInstaller
                 options.JsonSerializerOptions.WriteIndented = true;
             });
 
-        services.AddAuthentication();
+        services.AddAuthorization();
 
         services.AddTransient<UserResolverService>();
+        services.AddScoped<ErrorHandlingMiddelware>();
 
         services.AddApiVersioning(x =>
         {
@@ -32,6 +33,4 @@ public class MvcInstaller : IInstaller
             x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
         });
     }
-    
-
 }

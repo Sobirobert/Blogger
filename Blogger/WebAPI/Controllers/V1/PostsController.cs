@@ -12,7 +12,6 @@ using WebAPI.Wrappers;
 
 namespace WebAPI.Controllers.V1;
 
-
 [Route("api/[controller]")]
 [ApiVersion("1.0")]
 [Authorize()]
@@ -20,6 +19,7 @@ namespace WebAPI.Controllers.V1;
 public class PostsController : ControllerBase
 {
     private readonly IPostService _postService;
+
     public PostsController(IPostService postService)
     {
         _postService = postService;
@@ -71,7 +71,7 @@ public class PostsController : ControllerBase
         return Created($"api/posts/{post.Id}", new Wrappers.Response<PostDto>(post));
     }
 
-    [SwaggerOperation(Summary = "Update a exsisting post")]
+    [SwaggerOperation(Summary = "Update a existing post")]
     [Authorize(Roles = UserRoles.User)]
     [HttpPut]
     public async Task<IActionResult> Update(UpdatePostDto updatePost)
@@ -79,7 +79,7 @@ public class PostsController : ControllerBase
         var userOwnsPost = await _postService.UserOwnsPostAsync(updatePost.Id, User.FindFirstValue(ClaimTypes.NameIdentifier));
         if (!userOwnsPost)
         {
-            return BadRequest(new Response<bool>() { Succeeded = false, Message = "You do not own this post" });
+            return BadRequest(new Response(false, "You do not own this post."));
         }
 
         await _postService.UpdatePostAsync(updatePost);
@@ -95,11 +95,9 @@ public class PostsController : ControllerBase
         var isAdmin = User.FindFirstValue(ClaimTypes.Role).Contains(UserRoles.Admin);
         if (!isAdmin && !userOwnsPost)
         {
-            return BadRequest(new Response<bool>() { Succeeded = false, Message = "You do not own this post" });
+            return BadRequest(new Response(false, "You do not own this post."));
         }
         await _postService.DeletePostAsync(id);
         return NoContent();
     }
 }
-
-

@@ -8,9 +8,9 @@ namespace Application.Services;
 
 public class PostService : IPostService
 {
-
     private readonly IPostRepository _postRepository;
     private readonly IMapper _mapper;
+
     public PostService(IPostRepository postRepository, IMapper mapper)
     {
         _postRepository = postRepository;
@@ -32,7 +32,6 @@ public class PostService : IPostService
     {
         var post = await _postRepository.GetByIdAsync(id);
         return _mapper.Map<PostDto>(post);
-
     }
 
     public async Task<PostDto> AddNewPostAsync(CreatePostDto newPost, string userId)
@@ -45,8 +44,8 @@ public class PostService : IPostService
         post.UserId = userId;
         var result = await _postRepository.AddAsync(post);
         return _mapper.Map<PostDto>(result);
-
     }
+
     public async Task UpdatePostAsync(UpdatePostDto updatePost)
     {
         var existingPost = await _postRepository.GetByIdAsync(updatePost.Id);

@@ -5,6 +5,7 @@ namespace Application.Services;
 public class UserResolverService
 {
     private readonly IHttpContextAccessor _context;
+
     public UserResolverService(IHttpContextAccessor context)
     {
         _context = context;

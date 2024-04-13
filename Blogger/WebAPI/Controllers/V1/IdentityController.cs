@@ -1,4 +1,5 @@
-﻿using WebAPI.Wrappers;
+﻿using Application.Interfaces;
+using Domain.Enums;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,9 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebAPI.Models;
-using Application.Services.Emails;
-using Application.Interfaces;
-using Domain.Enums;
+using WebAPI.Wrappers;
 
 namespace WebAPI.Controllers.V1;
 
@@ -21,6 +20,7 @@ public class IdentityController : ControllerBase
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
     private readonly IEmailSenderService _emailSenderService;
+
     public IdentityController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IEmailSenderService emailSenderService)
     {
         _roleManager = roleManager;
@@ -69,6 +69,48 @@ public class IdentityController : ControllerBase
         await _emailSenderService.Send(user.Email, "Registration confirmation", EmailTemplate.WelcomeMessage, user);
 
         return Ok(new Response<bool> { Succeeded = true, Message = "User created successfully!" });
+    }
+
+    [HttpPost]
+    [Route("SuperUserRegister")]
+    public async Task<IActionResult> SuperUserRegister(RegisterModel register)
+    {
+        var userExists = await _userManager.FindByNameAsync(register.Username);
+        if (userExists != null)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response<bool>
+            {
+                Succeeded = false,
+                Message = "User already exists!"
+            });
+        }
+
+        ApplicationUser user = new ApplicationUser()
+        {
+            Email = register.Email,
+            SecurityStamp = Guid.NewGuid().ToString(),
+            UserName = register.Username
+        };
+
+        var result = await _userManager.CreateAsync(user, register.Password);
+        if (!result.Succeeded)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response<bool>
+            {
+                Succeeded = false,
+                Message = "User creation failed! Please check user details and try again",
+                Errors = result.Errors.Select(x => x.Description)
+            });
+        }
+
+        if (!await _roleManager.RoleExistsAsync(UserRoles.AdminOrUser))
+            await _roleManager.CreateAsync(new IdentityRole(UserRoles.AdminOrUser));
+
+        await _userManager.AddToRoleAsync(user, UserRoles.AdminOrUser);
+
+        await _emailSenderService.Send(user.Email, "Registration confirmation", EmailTemplate.WelcomeMessage, user);
+
+        return Ok(new Response<bool> { Succeeded = true, Message = "SuperUser created successfully!" });
     }
 
     [HttpPost]
@@ -139,13 +181,12 @@ public class IdentityController : ControllerBase
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
 
-            return Ok(new
+            return Ok(new AuthSuccessResponse()
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = token.ValidTo
             });
         }
         return Unauthorized();
     }
 }
-

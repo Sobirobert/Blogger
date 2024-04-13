@@ -1,5 +1,4 @@
-﻿
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IPostRepository, PostRepository>();
         services.AddScoped<ICosmosPostRepository, CosmosPostRepository>();
+        services.AddScoped<IPictureRepository, PictureRepository>();
 
         return services;
     }

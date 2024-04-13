@@ -7,7 +7,6 @@ public class SortingFilter
     public string SortField { get; set; }
     public bool Ascending { get; set; }
 
-
     public SortingFilter()
     {
         SortField = "Id";
@@ -27,5 +26,4 @@ public class SortingFilter
         SortField = sortField;
         Ascending = ascending;
     }
-
 }

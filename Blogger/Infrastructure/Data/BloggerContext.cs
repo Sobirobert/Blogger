@@ -1,5 +1,4 @@
-﻿
-using Application.Services;
+﻿using Application.Services;
 using Domain.Common;
 using Domain.Entities;
 using Infrastructure.Identity;
@@ -11,12 +10,14 @@ namespace Infrastructure.Data;
 public class BloggerContext : IdentityDbContext<ApplicationUser>
 {
     private readonly UserResolverService _userResolverService;
+
     public BloggerContext(DbContextOptions<BloggerContext> options, UserResolverService userService) : base(options)
     {
         _userResolverService = userService;
     }
 
     public DbSet<Post> Posts { get; set; }
+    public DbSet<Picture> Pictures { get; set; }
 
     public async Task<int> SaveChangesAsync()
     {
@@ -29,7 +30,6 @@ public class BloggerContext : IdentityDbContext<ApplicationUser>
             ((AuditableEntity)entityEntry.Entity).LastModified = DateTime.UtcNow;
             ((AuditableEntity)entityEntry.Entity).LastModifiedBy = _userResolverService.GetUser();
 
-
             if (entityEntry.State == EntityState.Added)
             {
                 ((AuditableEntity)entityEntry.Entity).Created = DateTime.UtcNow;
@@ -38,5 +38,4 @@ public class BloggerContext : IdentityDbContext<ApplicationUser>
         }
         return await base.SaveChangesAsync();
     }
-
 }

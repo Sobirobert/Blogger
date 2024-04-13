@@ -1,5 +1,4 @@
-﻿using Application.Dto;
-using Application.Dto.Cosmos;
+﻿using Application.Dto.Cosmos;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -14,6 +13,7 @@ namespace WebAPI.Controllers.V2;
 public class PostsController : ControllerBase
 {
     private readonly ICosmosPostService _postService;
+
     public PostsController(ICosmosPostService postService)
     {
         _postService = postService;
@@ -64,4 +64,3 @@ public class PostsController : ControllerBase
         return NoContent();
     }
 }
-
