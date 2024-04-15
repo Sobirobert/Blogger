@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 
 namespace WebAPI.Installers;
 
@@ -11,6 +14,7 @@ public class SwaggerInstaller : IInstaller
         {
             c.EnableAnnotations();
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
+            c.ExampleFilters();
 
             var securityScheme = new OpenApiSecurityScheme
             {
@@ -31,6 +35,12 @@ public class SwaggerInstaller : IInstaller
             {
                 {securityScheme, new string[] {}}
             });
+
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
         });
+
+        services.AddSwaggerExamplesFromAssemblyOf<Startup>();
     }
 }

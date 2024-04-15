@@ -12,6 +12,7 @@ public class Post : AuditableEntity
 
     [Required]
     [MaxLength(100)]
+    [MinLength(5)]
     public string Title { get; set; }
 
     [Required]
@@ -23,6 +24,7 @@ public class Post : AuditableEntity
     public string UserId { get; set; }
 
     public ICollection<Picture> Pictures { get; set; }
+    public ICollection<Attachment> Attachments { get; set; }
 
     public Post()
     { }

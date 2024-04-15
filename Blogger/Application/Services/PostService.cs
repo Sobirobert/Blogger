@@ -36,10 +36,16 @@ public class PostService : IPostService
 
     public async Task<PostDto> AddNewPostAsync(CreatePostDto newPost, string userId)
     {
-        if (string.IsNullOrEmpty(newPost.Title))
-        {
-            throw new Exception("Post can not have an empty title.");
-        }
+        //if (string.IsNullOrEmpty(newPost.Title)&& string.IsNullOrWhiteSpace(newPost.Title)) // sprawdzanie czy tytuł nie jest nullem lub ciągiem znaków
+        //{
+        //    throw new Exception("Post can not have an empty title.");
+        //}
+
+        //if (3 < newPost.Title.Length && newPost.Title.Length < 100)
+        //{
+        //    throw new Exception("The title must be beetween 3 and 100 charakters long");
+        //}
+
         var post = _mapper.Map<Post>(newPost);
         post.UserId = userId;
         var result = await _postRepository.AddAsync(post);

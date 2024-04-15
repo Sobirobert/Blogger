@@ -14,16 +14,16 @@ public static class ExtensionMethods
 
     }
 
-    //public static string SaveFile(this IFormFile formFile)
-    //{
-    //    string rootPath = @"c:\Blogger_Attachments";
-    //    if (!Directory.Exists(rootPath))
-    //        Directory.CreateDirectory(rootPath);
-    //    string filePath = Path.Combine(rootPath, $"{Guid.NewGuid()}_{formFile.FileName}");
+    public static string SaveFile(this IFormFile formFile)
+    {
+        string rootPath = @"D:\repos5\Blogger\Blogger_Attachments";
+        if (!Directory.Exists(rootPath))
+            Directory.CreateDirectory(rootPath);
+        string filePath = Path.Combine(rootPath, $"{Guid.NewGuid()}_{formFile.FileName}");
 
-    //    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-    //        formFile.CopyTo(fileStream);
+        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            formFile.CopyTo(fileStream);
 
-    //    return filePath;
-    //}
+        return filePath;
+    }
 }
