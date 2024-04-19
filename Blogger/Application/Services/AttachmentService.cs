@@ -21,7 +21,6 @@ public class AttachmentService : IAttachmentService
         _mapper = mapper;
     }
 
-
     public async Task<IEnumerable<AttachmentDto>> GetAttachmentsByPostIdAsync(int postId)
     {
         var attachment = await _attachmentRepository.GetByPostIdAsync(postId);
@@ -60,5 +59,4 @@ public class AttachmentService : IAttachmentService
             Content = File.ReadAllBytes(attachment.Path)
         };
     }
-
 }

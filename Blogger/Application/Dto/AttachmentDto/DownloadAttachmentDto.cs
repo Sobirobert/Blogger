@@ -1,5 +1,4 @@
-﻿
-namespace Application.Dto.AttachmentDto;
+﻿namespace Application.Dto.AttachmentDto;
 
 public class DownloadAttachmentDto : AttachmentDto
 {

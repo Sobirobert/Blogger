@@ -1,14 +1,11 @@
-﻿using System;
-using Blogger.Contracts.Request;
-using System.Threading.Tasks;
-using Blogger.Sdk;
+﻿using Blogger.Contracts.Request;
 using Refit;
 
 namespace Blogger.Sdk.Sample;
 
 public class Program
 {
-    static async Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var cachedToken = string.Empty;
 
@@ -24,7 +21,6 @@ public class Program
             Email = "sdkacccount@gmail.com",
             Username = "sdkaacccount",
             Password = "Pa$$wOrd123!"
-
         });
 
         var login = await identityApi.LoginAsync(new LoginModel()
@@ -52,4 +48,3 @@ public class Program
         await bloggerApi.DeletePostAsync(retrievedPost.Content.Data.Id);
     }
 }
-

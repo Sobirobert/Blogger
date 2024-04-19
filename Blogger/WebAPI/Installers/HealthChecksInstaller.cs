@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Data;
-using Microsoft.Extensions.DependencyInjection;
 using WebAPI.HealthChecks;
 
 namespace WebAPI.Installers;
@@ -16,6 +15,5 @@ public class HealthChecksInstaller : IInstaller
 
         services.AddHealthChecksUI()
             .AddInMemoryStorage();
-
     }
 }

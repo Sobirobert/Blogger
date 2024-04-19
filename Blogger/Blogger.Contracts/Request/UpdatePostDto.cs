@@ -1,9 +1,7 @@
-﻿
-namespace Blogger.Contracts.Request;
+﻿namespace Blogger.Contracts.Request;
 
-public class UpdatePostDto 
-{ 
+public class UpdatePostDto
+{
     public int Id { get; set; }
     public string Content { get; set; }
-
 }

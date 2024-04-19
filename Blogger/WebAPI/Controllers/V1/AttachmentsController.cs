@@ -3,7 +3,6 @@ using Application.Interfaces;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 using WebAPI.Wrappers;
@@ -24,7 +23,6 @@ namespace WebAPI.Controllers.V1
             _attachmentService = attachmentService;
             _postService = postService;
         }
-
 
         [SwaggerOperation(Summary = "Retrieves a attachments by unique post id")]
         [HttpGet("[action]/{postId}")]
@@ -52,10 +50,8 @@ namespace WebAPI.Controllers.V1
             return File(attachment.Content, System.Net.Mime.MediaTypeNames.Application.Octet, attachment.Name);
         }
 
-
         [SwaggerOperation(Summary = "Add a new attachment to post")]
         [HttpPost("{postId}")]
-
         public async Task<IActionResult> AddToPostAsync(int postId, IFormFile file)
         {
             var post = await _postService.GetPostByIdAsync(postId);
@@ -74,10 +70,8 @@ namespace WebAPI.Controllers.V1
             return Created($"api/attachments/{attachment.Id}", new Response<AttachmentDto>(attachment));
         }
 
-
         [SwaggerOperation(Summary = "Delete a specific attachment")]
         [HttpDelete("{postId}/{id}")]
-
         public async Task<IActionResult> DeleteAsync(int id, int postId)
         {
             var userOwnsPost = await _postService.UserOwnsPostAsync(postId, User.FindFirstValue(ClaimTypes.NameIdentifier));

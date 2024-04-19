@@ -11,7 +11,6 @@ public static class ExtensionMethods
             formFile.CopyTo(memoryStream);
             return memoryStream.ToArray();  // konwersja na bazę danych w postaci bajtów
         }
-
     }
 
     public static string SaveFile(this IFormFile formFile)

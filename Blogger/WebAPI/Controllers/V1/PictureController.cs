@@ -3,7 +3,6 @@ using Application.Interfaces;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 using WebAPI.Wrappers;
@@ -18,6 +17,7 @@ public class PictureController : ControllerBase
 {
     private readonly IPictureService _pictureSerwice;
     private readonly IPostService _postService;
+
     public PictureController(IPictureService pictureService, IPostService postService)
     {
         _pictureSerwice = pictureService;
@@ -26,7 +26,6 @@ public class PictureController : ControllerBase
 
     [SwaggerOperation(Summary = "Retrieves a picture by uniqe post id")]
     [HttpGet("[action]/{postId}")]
-
     public async Task<IActionResult> GetByPostId(int postId)
     {
         var pictures = await _pictureSerwice.GetPicturesByPostIdAsync(postId);
@@ -93,5 +92,4 @@ public class PictureController : ControllerBase
         await _pictureSerwice.DeletePictureAsync(id);
         return NoContent();
     }
-
 }

@@ -3,8 +3,6 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OData.Edm;
-using Newtonsoft.Json;
-using WebAPI.HealthChecks;
 using WebAPI.Installers;
 using WebAPI.MiddelWares;
 
@@ -34,7 +32,6 @@ public class Startup
         }
 
         app.UseMiddleware<ErrorHandlingMiddelware>();
-
 
         //app.UseHealthChecks("/health", new HealthCheckOptions
         //{
@@ -74,7 +71,6 @@ public class Startup
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
             endpoints.MapHealthChecksUI();
-
         });
     }
 

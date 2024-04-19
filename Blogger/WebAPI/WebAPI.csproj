@@ -35,11 +35,13 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.1" />
+    <Reference Include="System.XML.dll"/>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+	  <CSFile Include="*.cs" Exclude="App1.config"/>
+	  <Reference Include="System.XML.dll"/>
   </ItemGroup>
-
 </Project>

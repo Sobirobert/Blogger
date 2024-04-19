@@ -8,20 +8,22 @@ namespace Infrastructure.Repositories;
 public class PictureRepository : IPictureRepository
 {
     private readonly BloggerContext _context;
+
     public PictureRepository(BloggerContext context)
     {
         _context = context;
     }
-   
+
     public async Task<IEnumerable<Picture>> GetByPostIdAsync(int postId)
     {
         return await _context.Pictures.Include(x => x.Posts).Where(x => x.Posts.Select(x => x.Id).Contains(postId)).ToListAsync();
     }
+
     public async Task<Picture> GetByIdAsync(int id)
     {
         return await _context.Pictures.SingleOrDefaultAsync(x => x.Id == id);
     }
-   
+
     public async Task<Picture> AddAsync(Picture picture)
     {
         var createdPicture = await _context.Pictures.AddAsync(picture);

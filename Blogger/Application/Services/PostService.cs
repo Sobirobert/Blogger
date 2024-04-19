@@ -13,7 +13,6 @@ public class PostService : IPostService
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
 
-
     public PostService(IPostRepository postRepository, IMapper mapper, ILogger<PostService> logger)
     {
         _postRepository = postRepository;
@@ -23,8 +22,8 @@ public class PostService : IPostService
 
     public async Task<IEnumerable<PostDto>> GetAllPostsAsync(int pageNumber, int pageSize, string sortField, bool ascending, string filterBy)
     {
-        //_logger.LogDebug("Fetching posts.");
-        //_logger.LogInformation($"pageNumber: { pageNumber} | pageSize: {pageSize}");
+        _logger.LogDebug("Fetching posts.");
+        _logger.LogInformation($"pageNumber: {pageNumber} | pageSize: {pageSize}");
 
         var posts = await _postRepository.GetAllAsync(pageNumber, pageSize, sortField, ascending, filterBy);
         return _mapper.Map<IEnumerable<PostDto>>(posts);

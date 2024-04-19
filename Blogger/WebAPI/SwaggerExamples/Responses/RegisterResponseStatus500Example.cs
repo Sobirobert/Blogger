@@ -15,4 +15,5 @@ public class RegisterResponseStatus500Example : IExamplesProvider<RegisterRespon
     }
 }
 
-public class RegisterResponseStatus500 : Response { }
+public class RegisterResponseStatus500 : Response
+{ }

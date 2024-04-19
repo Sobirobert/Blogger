@@ -4,8 +4,8 @@ namespace WebAPI.HealthChecks;
 
 public class ResponsTimeHealthCheck : IHealthCheck
 {
-
     private Random rnd = new Random();
+
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         int responseTimeMS = rnd.Next(1, 100);

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using WebAPI.Wrappers;
 
 namespace WebAPI.Attributes;
@@ -12,7 +12,6 @@ public class ValidateFilterAttribute : ResultFilterAttribute
 
         if (!context.ModelState.IsValid)
         {
-
             var entry = context.ModelState.Values.FirstOrDefault();
 
             context.Result = new BadRequestObjectResult(new Response<bool>
@@ -22,6 +21,5 @@ public class ValidateFilterAttribute : ResultFilterAttribute
                 Errors = entry.Errors.Select(x => x.ErrorMessage)
             });
         }
-
     }
 }

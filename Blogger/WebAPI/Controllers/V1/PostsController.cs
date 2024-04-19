@@ -1,6 +1,5 @@
 ﻿using Application.Dto;
 using Application.Interfaces;
-using Application.Validators;
 using Infrastructure.Identity;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;

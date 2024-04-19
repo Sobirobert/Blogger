@@ -15,4 +15,5 @@ public class RegisterResponseStatus200Example : IExamplesProvider<RegisterRespon
     }
 }
 
-public class RegisterResponseStatus200 : Response { }
+public class RegisterResponseStatus200 : Response
+{ }

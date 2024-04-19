@@ -1,5 +1,3 @@
-
-
 using NLog.Web;
 
 namespace WebAPI;

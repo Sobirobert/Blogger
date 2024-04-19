@@ -5,20 +5,16 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services;
 
 public class PictureService : IPictureService
 {
-
     private readonly IPictureRepository _pictureRepository;
     private readonly IPostRepository _postRepository;
     private readonly IMapper _mapper;
+
     public PictureService(IPictureRepository pictureRepository, IPostRepository postRepository, IMapper mapper)
     {
         _pictureRepository = pictureRepository;

@@ -1,5 +1,4 @@
-﻿
-using Blogger.Contracts.Request;
+﻿using Blogger.Contracts.Request;
 using Blogger.Contracts.Responses;
 using Refit;
 
