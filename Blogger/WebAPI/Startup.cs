@@ -84,4 +84,6 @@ public class Startup
         builder.EntitySet<PostDto>("Posts");
         return builder.GetEdmModel();
     }
+
+    //LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 }
