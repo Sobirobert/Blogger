@@ -37,11 +37,13 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.1" />
     <Reference Include="System.XML.dll"/>
   </ItemGroup>
+	
+	<ItemGroup>
+		<CSFile Include="*.cs" Exclude="nlog.config"/>
+	</ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-	  <CSFile Include="*.cs" Exclude="App1.config"/>
-	  <Reference Include="System.XML.dll"/>
   </ItemGroup>
 </Project>
