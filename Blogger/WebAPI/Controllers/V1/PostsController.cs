@@ -4,6 +4,7 @@ using Infrastructure.Identity;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 using WebAPI.Attributes;
@@ -20,10 +21,16 @@ namespace WebAPI.Controllers.V1;
 public class PostsController : ControllerBase
 {
     private readonly IPostService _postService;
+    private readonly IMemoryCache _memoryCache;
+    private readonly ILogger _logger;
 
-    public PostsController(IPostService postService)
+
+
+    public PostsController(IPostService postService, IMemoryCache memoryCache, ILogger<PostsController> logger)
     {
         _postService = postService;
+        _memoryCache = memoryCache;
+        _logger = logger;
     }
 
     [SwaggerOperation(Summary = "Retrieves sort fields")]
@@ -39,15 +46,45 @@ public class PostsController : ControllerBase
     [HttpGet("[action]")]
     public async Task<IActionResult> Get([FromQuery] PaginationFilter paginationFilter, [FromQuery] SortingFilter sortingFilter, [FromQuery] string filterBy = "")
     {
+        var posts = _memoryCache.Get<IEnumerable<PostDto>>("posts");
+
         var validPaginationFilter = new PaginationFilter(paginationFilter.PageNumber, paginationFilter.PageSize);
         var validSortingFilter = new SortingFilter(sortingFilter.SortField, sortingFilter.Ascending);
-
-        var posts = await _postService.GetAllPostsAsync(validPaginationFilter.PageNumber, validPaginationFilter.PageSize,
+        if (posts == null)
+        {                                                                         // pobieranie postów z cache służy nie do pobierania wszystkich, tylko postów z określonego czasu
+            _logger.LogInformation("Fetching from service.");
+            posts = await _postService.GetAllPostsAsync(validPaginationFilter.PageNumber, validPaginationFilter.PageSize,
                                                        validSortingFilter.SortField, validSortingFilter.Ascending, filterBy);
+            _memoryCache.Set("posts", posts, TimeSpan.FromMinutes(1));
+        }
+        else
+        {
+            _logger.LogInformation("Fetching from cache.");
+        }
+        
         var totalRecords = await _postService.GetAllPostsCountAsync(filterBy);
-
         return Ok(PaginationHelper.CreatePageResponse(posts, validPaginationFilter, totalRecords));
     }
+
+    //[SwaggerOperation(Summary = "Retrieves all posts")]
+    //[Authorize(Roles = UserRoles.Admin)]
+    //[HttpGet("[action]")]
+    //public IQueryable<PostDto> GetAll()
+    //{
+    //    var posts = _memoryCache.Get<IQueryable<PostDto>>("posts");
+    //    if (posts == null)
+    //    {                                                                         // pobieranie postów z cache służy nie do pobierania wszystkich, tylko postów z określonego czasu
+    //        _logger.LogInformation("Fetching from service.");
+    //        posts = _postService.GetAllPostsAsync();
+    //        _memoryCache.Set("posts", posts, TimeSpan.FromMinutes(1));
+    //    }
+    //    else
+    //    {
+    //        _logger.LogInformation("Fetching from cache.");
+    //    }
+
+    //    return posts;
+    //}
 
     [SwaggerOperation(Summary = "Retrieves a specific post by unique Id")]
     [AllowAnonymous]

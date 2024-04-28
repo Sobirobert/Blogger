@@ -16,6 +16,8 @@ public class MvcInstaller : IInstaller
         services.AddApplication();
         services.AddInfrastructure();
 
+        services.AddMemoryCache();
+
         services.AddControllers()
             .AddFluentValidation(options =>
             {
