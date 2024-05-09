@@ -1,5 +1,4 @@
-﻿
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Services;
 using WebAPI.Cache;
 
@@ -17,7 +16,6 @@ public class CacheInstaller : IInstaller
         {
             return;
         }
-
         services.AddStackExchangeRedisCache(options => options.Configuration = redisCacheSettings.ConnectionString);
         services.AddSingleton<IResponseCacheService, ResponseCacheService>();
     }

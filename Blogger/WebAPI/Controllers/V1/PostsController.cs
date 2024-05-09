@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 using WebAPI.Attributes;
+using WebAPI.Cache;
 using WebAPI.Filters;
 using WebAPI.Helpers;
 using WebAPI.Wrappers;
@@ -42,29 +43,47 @@ public class PostsController : ControllerBase
 
     [SwaggerOperation(Summary = "Retrieves all posts")]
     [EnableQuery]
+    [Cached(600)]
     [Authorize(Roles = UserRoles.Admin)]
     [HttpGet("[action]")]
     public async Task<IActionResult> Get([FromQuery] PaginationFilter paginationFilter, [FromQuery] SortingFilter sortingFilter, [FromQuery] string filterBy = "")
     {
-        var posts = _memoryCache.Get<IEnumerable<PostDto>>("posts");
-
         var validPaginationFilter = new PaginationFilter(paginationFilter.PageNumber, paginationFilter.PageSize);
         var validSortingFilter = new SortingFilter(sortingFilter.SortField, sortingFilter.Ascending);
-        if (posts == null)
-        {                                                                         // pobieranie postów z cache służy nie do pobierania wszystkich, tylko postów z określonego czasu
-            _logger.LogInformation("Fetching from service.");
-            posts = await _postService.GetAllPostsAsync(validPaginationFilter.PageNumber, validPaginationFilter.PageSize,
-                                                       validSortingFilter.SortField, validSortingFilter.Ascending, filterBy);
-            _memoryCache.Set("posts", posts, TimeSpan.FromMinutes(1));
-        }
-        else
-        {
-            _logger.LogInformation("Fetching from cache.");
-        }
-        
+        var posts = await _postService.GetAllPostsAsync(validPaginationFilter.PageNumber, validPaginationFilter.PageSize,
+                                                   validSortingFilter.SortField, validSortingFilter.Ascending, filterBy);
+
+
         var totalRecords = await _postService.GetAllPostsCountAsync(filterBy);
         return Ok(PaginationHelper.CreatePageResponse(posts, validPaginationFilter, totalRecords));
     }
+
+
+    //[SwaggerOperation(Summary = "Retrieves all posts witch cache")]
+    //[EnableQuery]
+    //[Authorize(Roles = UserRoles.Admin)]
+    //[HttpGet("[action]")]
+    //public async Task<IActionResult> GetWithCache([FromQuery] PaginationFilter paginationFilter, [FromQuery] SortingFilter sortingFilter, [FromQuery] string filterBy = "")
+    //{
+    //    var posts = _memoryCache.Get<IEnumerable<PostDto>>("posts");
+
+    //    var validPaginationFilter = new PaginationFilter(paginationFilter.PageNumber, paginationFilter.PageSize);
+    //    var validSortingFilter = new SortingFilter(sortingFilter.SortField, sortingFilter.Ascending);
+    //    if (posts == null)
+    //    {                                                                         // pobieranie postów z cache służy nie do pobierania wszystkich, tylko postów z określonego czasu
+    //        _logger.LogInformation("Fetching from service.");
+    //        posts = await _postService.GetAllPostsAsync(validPaginationFilter.PageNumber, validPaginationFilter.PageSize,
+    //                                                   validSortingFilter.SortField, validSortingFilter.Ascending, filterBy);
+    //        _memoryCache.Set("posts", posts, TimeSpan.FromMinutes(1));
+    //    }
+    //    else
+    //    {
+    //        _logger.LogInformation("Fetching from cache.");
+    //    }
+
+    //    var totalRecords = await _postService.GetAllPostsCountAsync(filterBy);
+    //    return Ok(PaginationHelper.CreatePageResponse(posts, validPaginationFilter, totalRecords));
+    //}
 
     //[SwaggerOperation(Summary = "Retrieves all posts")]
     //[Authorize(Roles = UserRoles.Admin)]
