@@ -7,6 +7,7 @@ using Domain.Interfaces;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Xunit;
 
 namespace UnitTests.Services;
 

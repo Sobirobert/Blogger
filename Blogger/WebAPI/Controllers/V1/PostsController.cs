@@ -44,7 +44,8 @@ public class PostsController : ControllerBase
     [SwaggerOperation(Summary = "Retrieves all posts")]
     [EnableQuery]
     [Cached(600)]
-    [Authorize(Roles = UserRoles.Admin)]
+    [AllowAnonymous]
+    //[Authorize(Roles = UserRoles.Admin)]
     [HttpGet("[action]")]
     public async Task<IActionResult> Get([FromQuery] PaginationFilter paginationFilter, [FromQuery] SortingFilter sortingFilter, [FromQuery] string filterBy = "")
     {

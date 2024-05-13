@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Identity;
+using Xunit;
 
 namespace UnitTests.Services
 {
