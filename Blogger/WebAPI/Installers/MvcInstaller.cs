@@ -1,4 +1,5 @@
-﻿using Application;
+﻿using App.Metrics;
+using Application;
 using Application.Services;
 using Application.Validators;
 using FluentValidation.AspNetCore;
@@ -15,6 +16,9 @@ public class MvcInstaller : IInstaller
     {
         services.AddApplication();
         services.AddInfrastructure();
+
+        var metrics = AppMetrics.CreateDefaultBuilder().Build();
+        services.AddMetrics(metrics);
 
         services.AddMemoryCache();
 

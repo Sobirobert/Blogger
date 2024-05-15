@@ -1,3 +1,5 @@
+using App.Metrics.AspNetCore;
+using App.Metrics.Formatters.Prometheus;
 using NLog.Web;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
@@ -35,19 +37,29 @@ public class Program
             {
                 webBuilder.UseStartup<Startup>();
             })
-           .UseNLog();
-           //.UseSerilog((context, configuration) => 
-           //{
-           // configuration.Enrich.FromLogContext()
-           // .Enrich.WithMachineName()
-           // .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(context.Configuration["ElasticConfiguration:Uri"]))
-           // {
-           //     IndexFormat = $"{context.Configuration["ApplicationName"]}-logs-{context.HostingEnvironment.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
-           //     AutoRegisterTemplate = true,
-           //     NumberOfShards = 2,
-           //     NumberOfReplicas = 1
-           // })
-           // .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
-           // .ReadFrom.Configuration(context.Configuration);
-           //});
+           .UseNLog()
+           .UseMetricsWebTracking()
+           .UseMetrics(options =>
+           {
+               options.EndpointOptions = endpointsOptions =>
+               {
+                   endpointsOptions.MetricsEndpointOutputFormatter = new MetricsPrometheusTextOutputFormatter(); 
+                   endpointsOptions.MetricsTextEndpointOutputFormatter = new MetricsPrometheusProtobufOutputFormatter();
+                   endpointsOptions.EnvironmentInfoEndpointEnabled = false;
+               };
+           });
+    //.UseSerilog((context, configuration) => 
+    //{
+    // configuration.Enrich.FromLogContext()
+    // .Enrich.WithMachineName()
+    // .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(context.Configuration["ElasticConfiguration:Uri"]))
+    // {
+    //     IndexFormat = $"{context.Configuration["ApplicationName"]}-logs-{context.HostingEnvironment.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
+    //     AutoRegisterTemplate = true,
+    //     NumberOfShards = 2,
+    //     NumberOfReplicas = 1
+    // })
+    // .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
+    // .ReadFrom.Configuration(context.Configuration);
+    //});
 }
