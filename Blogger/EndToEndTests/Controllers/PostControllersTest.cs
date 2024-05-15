@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using WebAPI;
 using WebAPI.Wrappers;
@@ -44,8 +45,8 @@ public class PostsControllerTests
         var pagedResponse = JsonConvert.DeserializeObject<PagedResponse<IEnumerable<PostDto>>>(content);
 
         // Assert
-        response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.OK); //do teog potrzeba nugeta FluentAssertions
-        pagedResponse.Data.Should().NotBeEmpty();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);// do tego porzeba nugeta fluent 
+        pagedResponse?.Data.Should().NotBeEmpty();
     }
 
     [Fact]

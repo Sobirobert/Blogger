@@ -1,4 +1,5 @@
-﻿using Application.Dto;
+﻿
+using Application.Dto;
 using Application.Interfaces;
 using Infrastructure.Identity;
 using Microsoft.AspNet.OData;
@@ -41,21 +42,22 @@ public class PostsController : ControllerBase
         return Ok(SortingHelper.GetSortFields().Select(x => x.Key));
     }
 
-    [SwaggerOperation(Summary = "Retrieves all posts")]
-    [EnableQuery]
+    [SwaggerOperation(Summary = "Retrieves all posts")]   
     [Cached(600)]
     [AllowAnonymous]
     //[Authorize(Roles = UserRoles.Admin)]
-    [HttpGet("[action]")]
+    [HttpGet]
     public async Task<IActionResult> Get([FromQuery] PaginationFilter paginationFilter, [FromQuery] SortingFilter sortingFilter, [FromQuery] string filterBy = "")
     {
         var validPaginationFilter = new PaginationFilter(paginationFilter.PageNumber, paginationFilter.PageSize);
         var validSortingFilter = new SortingFilter(sortingFilter.SortField, sortingFilter.Ascending);
-        var posts = await _postService.GetAllPostsAsync(validPaginationFilter.PageNumber, validPaginationFilter.PageSize,
-                                                   validSortingFilter.SortField, validSortingFilter.Ascending, filterBy);
 
+        var posts = await _postService.GetAllPostsAsync(validPaginationFilter.PageNumber, validPaginationFilter.PageSize,
+                                                        validSortingFilter.SortField, validSortingFilter.Ascending,
+                                                        filterBy);
 
         var totalRecords = await _postService.GetAllPostsCountAsync(filterBy);
+
         return Ok(PaginationHelper.CreatePageResponse(posts, validPaginationFilter, totalRecords));
     }
 
@@ -107,9 +109,9 @@ public class PostsController : ControllerBase
     //}
 
     [SwaggerOperation(Summary = "Retrieves a specific post by unique Id")]
-    [AllowAnonymous]
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> GetPostByID(int id)
     {
         var post = await _postService.GetPostByIdAsync(id);
         if (post == null)
@@ -117,12 +119,13 @@ public class PostsController : ControllerBase
             return NotFound(id);
         }
 
-        return Ok(new Wrappers.Response<PostDto>(post));
+        return Ok(new Response<PostDto>(post));
     }
 
     [ValidateFilter]
     [SwaggerOperation(Summary = "Create a new post")]
-    [Authorize(Roles = UserRoles.User)]
+    [AllowAnonymous]
+    //[Authorize(Roles = UserRoles.User + UserRoles.Admin + UserRoles.AdminOrUser)]
     [HttpPost]
     public async Task<IActionResult> Create(CreatePostDto newPost)
     {
@@ -139,7 +142,7 @@ public class PostsController : ControllerBase
         //}
 
         var post = await _postService.AddNewPostAsync(newPost, User.FindFirstValue(ClaimTypes.NameIdentifier));
-        return Created($"api/posts/{post.Id}", new Wrappers.Response<PostDto>(post));
+        return Created($"api/posts/{post.Id}", new Response<PostDto>(post));
     }
 
     [SwaggerOperation(Summary = "Update a existing post")]
