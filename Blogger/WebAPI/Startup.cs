@@ -75,16 +75,16 @@ public class Startup
 
         app.UseAuthorization();   // do logowania się na konto
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapHealthChecks("/health", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            endpoints.MapHealthChecksUI();
-        });
+        //app.UseEndpoints(endpoints =>
+        //{
+        //    endpoints.MapControllers();
+        //    endpoints.MapHealthChecks("/health", new HealthCheckOptions()
+        //    {
+        //        Predicate = _ => true,
+        //        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        //    });
+        //    endpoints.MapHealthChecksUI();
+        //});
     }
 
     public static IEdmModel GetEdmModel()
