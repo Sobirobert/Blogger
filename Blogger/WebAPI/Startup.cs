@@ -20,10 +20,23 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.InstallServicesInAssembly(Configuration);
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy",
+                        builder => builder
+                        .AllowAnyOrigin()  // umożliwia innym aplikacją stroną na korzystanie z naszych metod
+                        .AllowAnyMethod()  // pozwalamy na wykonanie dowolnej metody get,put,delete
+                                           //.AllowOrigin("http://localhost:3000") // umożliwia wybranym hostom na na dostęp
+                                           //.WithMethods("GET")   // umożliwia udostępnianej tylko metodzie GET
+                        .AllowAnyHeader()); // pozwalamy na przesyłanie dowolnych nagłówków
+        });
+
+        
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        app.UseCors("CorsPolicy");
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
